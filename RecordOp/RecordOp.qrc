@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/RecordOp">
+        <file>Resources/icon.ico</file>
+    </qresource>
+</RCC>
