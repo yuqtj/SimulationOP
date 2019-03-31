@@ -33,16 +33,30 @@ struct OPBase
 	int opCode;
 	// 操作时间间隔，完成操作后等待internelSeconds时间，默认1000毫秒
 	int internelSeconds = 1000;
+	QString opCodeText;
 };
 
 struct OPMouse : public OPBase
 {
+	OPMouse() 
+	{
+		type = OPBase::MOUSE;
+		x = 0;
+		y = 0;
+	}
+
 	int x;
 	int y;
 };
 
 struct OPKeyboard : public OPBase
 {
+	OPKeyboard()
+	{
+		type = OPBase::KEYBOARD;
+		isPressed = 0;
+	}
+
 	int isPressed;
 };
 
@@ -71,12 +85,19 @@ private:
 private:
 	void onStopRecord();
 	//
-	void addMouseOperate(int x, int y, int opCode);
-	void addKeyOperate(int isPressed, int opCode);
-	void addOperate(OPBase* op, int opCode);
+	void addMouseOperate(int x, int y, int opCode, const QString& opCodeText);
+	void addKeyOperate(int isPressed, int opCode, const QString& opCodeText);
+	void addOperate(OPBase* op, int opCode, const QString& opCodeText);
 
 	void doMouseOperate(OPMouse* op);
 	void doKeyOperate(OPKeyboard* op);
+
+	void showOP();
+	// 根据Table生成Operators
+	void generateOPFromTable();
+	void updateTable();
+
+	void clearOP();
 
 private:
 	Ui::RecordOpClass ui;

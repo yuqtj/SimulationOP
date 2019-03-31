@@ -11,12 +11,14 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTableWidget>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -30,6 +32,7 @@ public:
     QPushButton *clearButton;
     QLineEdit *operationTimesText;
     QLabel *label;
+    QTableWidget *opTable;
     QMenuBar *menuBar;
     QStatusBar *statusBar;
 
@@ -37,7 +40,7 @@ public:
     {
         if (RecordOpClass->objectName().isEmpty())
             RecordOpClass->setObjectName(QString::fromUtf8("RecordOpClass"));
-        RecordOpClass->resize(600, 400);
+        RecordOpClass->resize(764, 356);
         centralWidget = new QWidget(RecordOpClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         recordButton = new QPushButton(centralWidget);
@@ -45,24 +48,27 @@ public:
         recordButton->setGeometry(QRect(30, 30, 75, 23));
         operateButton = new QPushButton(centralWidget);
         operateButton->setObjectName(QString::fromUtf8("operateButton"));
-        operateButton->setGeometry(QRect(30, 190, 75, 23));
+        operateButton->setGeometry(QRect(30, 80, 75, 23));
         clearButton = new QPushButton(centralWidget);
         clearButton->setObjectName(QString::fromUtf8("clearButton"));
-        clearButton->setGeometry(QRect(30, 240, 75, 23));
+        clearButton->setGeometry(QRect(170, 280, 75, 23));
         operationTimesText = new QLineEdit(centralWidget);
         operationTimesText->setObjectName(QString::fromUtf8("operationTimesText"));
-        operationTimesText->setGeometry(QRect(30, 90, 71, 20));
+        operationTimesText->setGeometry(QRect(30, 150, 71, 20));
         label = new QLabel(centralWidget);
         label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(30, 70, 81, 16));
+        label->setGeometry(QRect(30, 130, 81, 16));
         QFont font;
         font.setFamily(QString::fromUtf8("\345\276\256\350\275\257\351\233\205\351\273\221"));
         font.setPointSize(9);
         label->setFont(font);
+        opTable = new QTableWidget(centralWidget);
+        opTable->setObjectName(QString::fromUtf8("opTable"));
+        opTable->setGeometry(QRect(140, 30, 611, 231));
         RecordOpClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(RecordOpClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 600, 23));
+        menuBar->setGeometry(QRect(0, 0, 764, 23));
         RecordOpClass->setMenuBar(menuBar);
         statusBar = new QStatusBar(RecordOpClass);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));

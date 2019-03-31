@@ -15,8 +15,9 @@ RecordOp::RecordOp(QWidget *parent)
 
 	opTimer = new QTime();
 
+	updateTable();
 	initTrayIcon();
-
+	
 	connect(ui.recordButton, SIGNAL(clicked()), this, SLOT(onStartRecord()));
 	connect(ui.operateButton, SIGNAL(clicked()), this, SLOT(onDoOperation()));
 	connect(ui.clearButton, SIGNAL(clicked()), this, SLOT(onClearOp()));
@@ -79,6 +80,9 @@ void RecordOp::onStopRecord()
 	xHook->uninstallMouseHook();
 	xHook->uninstallKeyHook();
 
+	// 显示操作UI
+	showOP();
+
 	this->show();
 
 	appState = IDLE;
@@ -87,6 +91,9 @@ void RecordOp::onStopRecord()
 
 void RecordOp::onDoOperation()
 {
+	// 从Table中重新生成operations
+	generateOPFromTable();
+
 	this->hide();
 	appState = OPERATING;
 
@@ -130,16 +137,14 @@ void RecordOp::onDoOperation()
 
 void RecordOp::onClearOp()
 {
-	for each (OPBase* op in operations)
-	{
-		delete op;
-	}
+	// 清空Table
+	ui.opTable->clear();
+	updateTable();
 
-	operations.clear();
-	qDebug() << "had Clear!";
+	clearOP();
 }
 
-void RecordOp::addMouseOperate(int x, int y, int opCode)
+void RecordOp::addMouseOperate(int x, int y, int opCode, const QString& opCodeText)
 {
 	static int lastX = -1;
 	static int lastY = -1;
@@ -159,22 +164,23 @@ void RecordOp::addMouseOperate(int x, int y, int opCode)
 	op->x = x;
 	op->y = y;
 
-	addOperate(op, opCode);
+	addOperate(op, opCode, opCodeText);
 }
 
-void RecordOp::addKeyOperate(int isPressed, int opCode)
+void RecordOp::addKeyOperate(int isPressed, int opCode, const QString& opCodeText)
 {
 	OPKeyboard* op = new OPKeyboard();
 	op->type = OPBase::KEYBOARD;
 	op->isPressed = isPressed;
 
-	addOperate(op, opCode);
+	addOperate(op, opCode, opCodeText);
 }
 
-void RecordOp::addOperate(OPBase* op, int opCode)
+void RecordOp::addOperate(OPBase* op, int opCode, const QString& opCodeText)
 {
 	op->opCode = opCode;
 	op->internelSeconds = opTimer->restart();
+	op->opCodeText = opCodeText;
 
 	operations.append(op);
 
@@ -193,6 +199,110 @@ void RecordOp::doKeyOperate(OPKeyboard* op)
 	keybd_event(op->opCode, 0, op->isPressed, 0);
 }
 
+void RecordOp::showOP()
+{
+	int length = operations.size();
+	ui.opTable->setRowCount(length);
+	for (int i = 0; i < length; i++)
+	{
+		OPBase* opBase = operations[i];
+
+		if (opBase->type == OPBase::MOUSE)
+		{
+			ui.opTable->setItem(i, 0, new QTableWidgetItem("鼠标"));
+			
+			OPMouse* opMouse = static_cast<OPMouse*>(opBase);
+			ui.opTable->setItem(i, 3, new QTableWidgetItem(QString::number(opMouse->x)));
+			ui.opTable->setItem(i, 4, new QTableWidgetItem(QString::number(opMouse->y)));
+		}
+		else if (opBase->type == OPBase::KEYBOARD)
+		{
+			ui.opTable->setItem(i, 0, new QTableWidgetItem("键盘"));
+			OPKeyboard* opKeyboard = static_cast<OPKeyboard*>(opBase);
+			ui.opTable->setItem(i, 5, new QTableWidgetItem(QString::number(opKeyboard->isPressed)));
+		}
+
+		if (opBase->opCodeText == "")
+		{
+			ui.opTable->setItem(i, 1, new QTableWidgetItem(QString::number(opBase->opCode)));
+		}
+		else
+		{
+			ui.opTable->setItem(i, 1, new QTableWidgetItem(opBase->opCodeText));
+		}
+		ui.opTable->setItem(i, 2, new QTableWidgetItem(QString::number(opBase->internelSeconds)));
+		ui.opTable->setItem(i, 6, new QTableWidgetItem(QString::number(opBase->opCode)));
+	}
+
+	updateTable();
+}
+
+void RecordOp::generateOPFromTable()
+{
+	// 后期加一个标识，当发生改变时才重新生成
+	if (false)
+	{
+		return;
+	}
+
+	clearOP();
+	
+	int length = ui.opTable->rowCount();
+	operations.reserve(length);
+	
+	for (int i = 0; i < length; i++)
+	{
+		OPBase* opBase = nullptr;
+		QString opType = ui.opTable->item(i, 0)->text();
+		if (opType == "鼠标")
+		{
+			OPMouse* opMouse = new OPMouse();
+			QString mouseXText = ui.opTable->item(i, 3)->text();
+			QString mouseYText = ui.opTable->item(i, 4)->text();
+			
+			opMouse->x = mouseXText.toInt();
+			opMouse->y = mouseYText.toInt();
+
+			opBase = opMouse;
+		}
+		else if (opType == "键盘")
+		{
+			OPKeyboard* opKeyboard = new OPKeyboard();
+			QString isPressedText = ui.opTable->item(i, 5)->text();
+			opKeyboard->isPressed = isPressedText.toInt();
+			
+			opBase = opKeyboard;
+		}
+
+		if (opBase)
+		{
+			QString internelSecondsText = ui.opTable->item(i, 2)->text();
+			opBase->internelSeconds = internelSecondsText.toInt();
+
+			QString opCode = ui.opTable->item(i, 6)->text();
+			opBase->opCode = opCode.toInt();
+
+			operations.push_back(opBase);
+		}
+	}
+}
+
+void RecordOp::updateTable()
+{
+	ui.opTable->setColumnCount(7);
+	ui.opTable->setHorizontalHeaderLabels(QStringList() << "操作事件" << "操作类型" << "时间间隔" << "鼠标X" << "鼠标Y" << "按下状态" << "OpCode");
+}
+
+void RecordOp::clearOP()
+{
+	for each (OPBase* op in operations)
+	{
+		delete op;
+	}
+
+	operations.clear();
+}
+
 void RecordOp::mouseEvent(TRANSFER_PARAM)
 {
 	PMOUSEHOOKSTRUCT pMouseHookStruct = (PMOUSEHOOKSTRUCT)lParam;
@@ -205,32 +315,33 @@ void RecordOp::mouseEvent(TRANSFER_PARAM)
 	{
 	case WM_LBUTTONDOWN:
 		qDebug() << "Mouse Left Button Down:";
-		addMouseOperate(x, y, MOUSEEVENTF_LEFTDOWN);
+		addMouseOperate(x, y, MOUSEEVENTF_LEFTDOWN, "WM_LBUTTONDOWN");
 		break;
 
 	case WM_RBUTTONDOWN:
 		//qDebug() << "Mouse Right Button Down:";
-		addMouseOperate(x, y, MOUSEEVENTF_RIGHTDOWN);
+		addMouseOperate(x, y, MOUSEEVENTF_RIGHTDOWN, "WM_RBUTTONDOWN");
 		break;
 
 	case WM_LBUTTONUP:
 		qDebug() << "Mouse Left Button Up:";
-		addMouseOperate(x, y, MOUSEEVENTF_LEFTUP);
+		addMouseOperate(x, y, MOUSEEVENTF_LEFTUP, "WM_LBUTTONUP");
 		break;
 
 	case WM_RBUTTONUP:
 		//qDebug() << "Mouse Right Button Up:";
-		addMouseOperate(x, y, MOUSEEVENTF_RIGHTUP);
+		addMouseOperate(x, y, MOUSEEVENTF_RIGHTUP, "WM_RBUTTONUP");
 		break;
 
 	case WM_MOUSEMOVE:
-		addMouseOperate(x, y, MOUSEEVENTF_MOVE);
+		addMouseOperate(x, y, MOUSEEVENTF_MOVE, "WM_MOUSEMOVE");
 		break;
 
 	// 按下鼠标中键后停止录制
 	case WM_MBUTTONDOWN:
 		if (appState == OPERATING)
 		{
+			// BUG：目前中键无法中断操作
 			appState = BREAK;
 		}
 		else if (appState == RECORDING)
@@ -253,14 +364,14 @@ void RecordOp::keyEvent(TRANSFER_PARAM)
 	{
 	case WM_KEYDOWN:
 	case WM_SYSKEYDOWN:
-		addKeyOperate(0, pKeyHookStruct->vkCode);
+		addKeyOperate(0, pKeyHookStruct->vkCode, "WM_KEYDOWN");
 		qDebug() << "WM_KEYDOWN" << pKeyHookStruct->vkCode;
 
 		break;
 
 	case WM_KEYUP:
 	case WM_SYSKEYUP:
-		addKeyOperate(KEYEVENTF_KEYUP, pKeyHookStruct->vkCode);
+		addKeyOperate(KEYEVENTF_KEYUP, pKeyHookStruct->vkCode, "WM_KEYUP");
 		qDebug() << "WM_KEYUP" << pKeyHookStruct->vkCode;
 
 		break;
