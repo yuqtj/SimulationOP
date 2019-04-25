@@ -102,12 +102,22 @@ void XGlobalHook::onKeyEvent(TRANSFER_PARAM)
 
 LRESULT CALLBACK MouseProc(TRANSFER_PARAM)
 {
+	if (appState == OPERATING && wParam != WM_MBUTTONDOWN)
+	{
+		return 1;
+	}
+
 	xHook->onMouseEvent(nCode, wParam, lParam);
 	return CallNextHookEx(g_hMouseHook, nCode, wParam, lParam);
 }
 
 LRESULT CALLBACK KeyboardProc(TRANSFER_PARAM)
 {
+	if (appState == OPERATING)
+	{
+		return 1;
+	}
+
 	xHook->onKeyEvent(nCode, wParam, lParam);
 	return CallNextHookEx(g_hKeyHook, nCode, wParam, lParam);
 }

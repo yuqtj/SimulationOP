@@ -42,6 +42,15 @@
     <ClCompile Include="XGlobalHook.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OpProject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OpExcutor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OPTreeWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="RecordOp.h">
@@ -66,6 +75,21 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GlobalApplication.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OPInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OpProject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OpExcutor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OPTreeWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AppIncludeBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

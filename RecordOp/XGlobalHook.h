@@ -7,6 +7,8 @@
 #include <QSharedPointer>
 #include "windows.h"
 
+#include "AppIncludeBase.h"
+
 #if defined(GLOBALHOOK_LIBRARY)
 #  define GLOBALHOOKSHARED_EXPORT Q_DECL_EXPORT
 #else

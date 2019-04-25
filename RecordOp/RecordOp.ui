@@ -40,19 +40,6 @@
      <string>操作</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="clearButton">
-    <property name="geometry">
-     <rect>
-      <x>170</x>
-      <y>280</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>清空</string>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="operationTimesText">
     <property name="geometry">
      <rect>
@@ -85,11 +72,76 @@
    <widget class="QTableWidget" name="opTable">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>30</y>
-      <width>611</width>
-      <height>231</height>
+      <x>310</x>
+      <y>50</y>
+      <width>441</width>
+      <height>211</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="OPTreeWidget" name="opTreeList">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>50</y>
+      <width>151</width>
+      <height>211</height>
+     </rect>
+    </property>
+    <property name="dragEnabled">
+     <bool>true</bool>
+    </property>
+    <property name="dragDropMode">
+     <enum>QAbstractItemView::InternalMove</enum>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::SingleSelection</enum>
+    </property>
+    <attribute name="headerVisible">
+     <bool>false</bool>
+    </attribute>
+    <column>
+     <property name="text">
+      <string notr="true">1</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>29</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>操作方案</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>30</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>具体操作列表</string>
     </property>
    </widget>
   </widget>
@@ -102,10 +154,41 @@
      <height>23</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="newButton"/>
+    <addaction name="openButton"/>
+    <addaction name="saveButton"/>
+   </widget>
+   <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="newButton">
+   <property name="text">
+    <string>新建</string>
+   </property>
+  </action>
+  <action name="openButton">
+   <property name="text">
+    <string>打开</string>
+   </property>
+  </action>
+  <action name="saveButton">
+   <property name="text">
+    <string>保存</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>OPTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header location="global">optreewidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="RecordOp.qrc"/>
  </resources>

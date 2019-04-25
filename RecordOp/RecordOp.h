@@ -2,63 +2,16 @@
 #pragma execution_character_set("utf-8")
 
 #include <QtWidgets/QMainWindow>
-#include <QList>
 #include <QTime>
 #include <QSystemTrayIcon>
 #include <QMenu>
 
+#include "OPInfo.h"
 #include "ui_RecordOp.h"
 #include "windows.h"
 #include "XGlobalHook.h"
-
-
-enum AppState
-{
-	IDLE,
-	RECORDING,
-	OPERATING,
-	// 中断
-	BREAK,
-};
-
-struct OPBase
-{
-	enum OPType
-	{
-		MOUSE,
-		KEYBOARD
-	};
-
-	OPType type;
-	int opCode;
-	// 操作时间间隔，完成操作后等待internelSeconds时间，默认1000毫秒
-	int internelSeconds = 1000;
-	QString opCodeText;
-};
-
-struct OPMouse : public OPBase
-{
-	OPMouse() 
-	{
-		type = OPBase::MOUSE;
-		x = 0;
-		y = 0;
-	}
-
-	int x;
-	int y;
-};
-
-struct OPKeyboard : public OPBase
-{
-	OPKeyboard()
-	{
-		type = OPBase::KEYBOARD;
-		isPressed = 0;
-	}
-
-	int isPressed;
-};
+#include "OpProject.h"
+#include "OpExcutor.h"
 
 class RecordOp : public QMainWindow
 {
@@ -71,43 +24,63 @@ public:
 public slots:
 	void onStartRecord();
 	void onDoOperation();
-	void onClearOp();
+	void onExcuteOpCompeleted();
+
+	void onNewFile();
+	void onOpenFile();
+	void onSaveFile();
 
 	void mouseEvent(TRANSFER_PARAM);
 	void keyEvent(TRANSFER_PARAM);
 	void onActivatedSysTrayIcon(QSystemTrayIcon::ActivationReason reason);
 	void onExitApp();
 
+	// tree widget
+	void copyTreeItemAction();
+	void deleteTreeItemAction();
 private:
 	// 初始化托盘程序
 	void initTrayIcon();
 
-private:
 	void onStopRecord();
 	//
 	void addMouseOperate(int x, int y, int opCode, const QString& opCodeText);
 	void addKeyOperate(int isPressed, int opCode, const QString& opCodeText);
 	void addOperate(OPBase* op, int opCode, const QString& opCodeText);
+	void addOpProject(OpProject* opProject);
 
-	void doMouseOperate(OPMouse* op);
-	void doKeyOperate(OPKeyboard* op);
-
+	void getActiveOpProjects(QTreeWidgetItem* item);
+	// 显示具体操作
 	void showOP();
 	// 根据Table生成Operators
 	void generateOPFromTable();
-	void updateTable();
 
+	void deleteOpProject(QTreeWidgetItem* item);
 	void clearOP();
 
+	// 将所有节点的OP写入Xml中
+	void saveXml(QDomDocument& doc, QDomElement& parent);
+	void saveXmlRecursion(QDomDocument& doc, QDomElement& parent, QTreeWidgetItem* item);
+
+	QTreeWidgetItem* loadTreeItem(QDomElement& nodeElement);
+	void loadXmlRecursion(QTreeWidgetItem* parentItem, QDomElement& parentElement);
+	void loadXmlOp(QTreeWidgetItem* parentItem, QDomElement& opsElement);
 private:
 	Ui::RecordOpClass ui;
-	QList<OPBase*> operations;
 
 	// 托盘程序
 	QSystemTrayIcon* sysTrayIcon;
 	QMenu* trayIconMenu;
 
-	AppState appState;
 	// 计算两个操作之间的间隔
 	QTime* opTimer;
+	// TreeWidget Menu
+	QMenu* treeWidgetMenu;
+
+	// 当前操作方案
+	OpProject* currentOpProject;
+	// 执行操作方案的线程
+	OpExcutor* opExcutor;
+
+	QMap<QTreeWidgetItem*, OpProject*> treeItemToProject;
 };

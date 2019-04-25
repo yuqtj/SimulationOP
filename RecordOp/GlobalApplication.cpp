@@ -21,7 +21,7 @@ bool GlobalApplication::notify(QObject *obj, QEvent *e)
 	const QMetaObject* objMeta = obj->metaObject();
 	QString clName = objMeta->className();
 
-	qDebug() << clName;
+	//qDebug() << clName;
 
 	if (e->type() == QEvent::KeyPress)
 	{
