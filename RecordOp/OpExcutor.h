@@ -19,13 +19,20 @@ public:
 		return opProjects.size();
 	}
 
+	inline void setOperateTimes(int times)
+	{
+		operateTimes = times;
+	}
+
 	inline void clear()
 	{
 		opProjects.clear();
+		operateTimes = 1;
 	}
 
 private:
 	QList<OpProject*> opProjects;
+	int operateTimes = 1;
 
 protected:
 	virtual void run() override;

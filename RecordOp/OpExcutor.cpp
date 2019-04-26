@@ -19,11 +19,14 @@ void OpExcutor::run()
 		return;
 	}
 
-	for each (auto opProject in opProjects)
+	for (int i = 0; i < operateTimes; i++)
 	{
-		if (0 == opProject->excuteOP())
+		for each (auto opProject in opProjects)
 		{
-			break;
+			if (0 == opProject->excuteOP())
+			{
+				break;
+			}
 		}
 	}
 

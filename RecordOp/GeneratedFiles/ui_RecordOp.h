@@ -66,13 +66,13 @@ public:
         recordButton->setGeometry(QRect(30, 30, 75, 23));
         operateButton = new QPushButton(centralWidget);
         operateButton->setObjectName(QStringLiteral("operateButton"));
-        operateButton->setGeometry(QRect(30, 80, 75, 23));
+        operateButton->setGeometry(QRect(30, 120, 75, 23));
         operationTimesText = new QLineEdit(centralWidget);
         operationTimesText->setObjectName(QStringLiteral("operationTimesText"));
-        operationTimesText->setGeometry(QRect(30, 150, 71, 20));
+        operationTimesText->setGeometry(QRect(30, 90, 71, 20));
         label = new QLabel(centralWidget);
         label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(30, 130, 81, 16));
+        label->setGeometry(QRect(30, 70, 81, 16));
         QFont font;
         font.setFamily(QString::fromUtf8("\345\276\256\350\275\257\351\233\205\351\273\221"));
         font.setPointSize(9);

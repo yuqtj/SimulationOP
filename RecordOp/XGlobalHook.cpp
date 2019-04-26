@@ -1,4 +1,5 @@
 #include "XGlobalHook.h"
+#include <QDebug>
 
 /// 静态变量定义
 QMutex XGlobalHook::mutex;
@@ -102,7 +103,11 @@ void XGlobalHook::onKeyEvent(TRANSFER_PARAM)
 
 LRESULT CALLBACK MouseProc(TRANSFER_PARAM)
 {
-	if (appState == OPERATING && wParam != WM_MBUTTONDOWN)
+	MSLLHOOKSTRUCT* p = (MSLLHOOKSTRUCT*)lParam;
+
+	// p->flags & LLMHF_INJECTED：如果是通过mouse_event发送来的消息则为true
+	// 加p->flags & LLMHF_INJECTED的目的是在操作期间不希望用户自己的鼠标控制影响到操作
+	if (appState == OPERATING && wParam != WM_MBUTTONDOWN && !(p->flags & LLMHF_INJECTED))
 	{
 		return 1;
 	}
@@ -113,7 +118,8 @@ LRESULT CALLBACK MouseProc(TRANSFER_PARAM)
 
 LRESULT CALLBACK KeyboardProc(TRANSFER_PARAM)
 {
-	if (appState == OPERATING)
+	KBDLLHOOKSTRUCT* p = (KBDLLHOOKSTRUCT*)lParam;
+	if (appState == OPERATING && !(p->flags & 16))
 	{
 		return 1;
 	}

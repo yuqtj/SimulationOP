@@ -127,19 +127,16 @@ void RecordOp::onDoOperation()
 		return;
 	}
 
-	opExcutor->start();
+	QString operateTimesStr = ui.operationTimesText->text();
+	// 循环执行次数，默认为1次
+	int operateTimes = 1;
+	if (!operateTimesStr.isEmpty())
+	{
+		operateTimes = operateTimesStr.toInt();
+	}
 
-	//QString operateTimesStr = ui.operationTimesText->text();
-	//// 循环执行次数，默认为1次
-	//int operateTimes = 1;
-	//if (!operateTimesStr.isEmpty())
-	//{
-	//	operateTimes = operateTimesStr.toInt();
-	//}
-	//for (int i = 0; i < operateTimes; i++)
-	//{
-	//	
-	//}
+	opExcutor->setOperateTimes(operateTimes);
+	opExcutor->start();
 }
 
 void RecordOp::onExcuteOpCompeleted()
@@ -334,8 +331,8 @@ void RecordOp::addOperate(OPBase* op, int opCode, const QString& opCodeText)
 
 	currentOpProject->addOperate(op);
 
-	qDebug() << "addOperate";
-	qDebug() << op->internelSeconds;
+	//qDebug() << "addOperate";
+	//qDebug() << op->internelSeconds;
 }
 
 void RecordOp::addOpProject(OpProject* opProject)
