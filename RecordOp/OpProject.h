@@ -22,6 +22,16 @@ public:
 		isBreak = true;
 	}
 
+	inline void setProjectDes(QString& desStr)
+	{
+		projectDes = desStr;
+	}
+
+	inline QString& getProjectDes()
+	{
+		return projectDes;
+	}
+
 	OpProject* copy();
 
 	void showOPToTableWidget(QTableWidget*& tableWidget);
@@ -39,6 +49,8 @@ private:
 
 private:
 	QList<OPBase*> operations;
+	// 方案描述
+	QString projectDes;
 	// 是否被中断操作
 	static bool isBreak;
 };

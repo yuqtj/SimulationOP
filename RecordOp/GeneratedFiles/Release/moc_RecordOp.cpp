@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_RecordOp_t {
-    QByteArrayData data[21];
-    char stringdata0[259];
+    QByteArrayData data[23];
+    char stringdata0[300];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -50,8 +50,10 @@ QT_MOC_LITERAL(15, 145, 22), // "onActivatedSysTrayIcon"
 QT_MOC_LITERAL(16, 168, 33), // "QSystemTrayIcon::ActivationRe..."
 QT_MOC_LITERAL(17, 202, 6), // "reason"
 QT_MOC_LITERAL(18, 209, 9), // "onExitApp"
-QT_MOC_LITERAL(19, 219, 18), // "copyTreeItemAction"
-QT_MOC_LITERAL(20, 238, 20) // "deleteTreeItemAction"
+QT_MOC_LITERAL(19, 219, 22), // "projectDesEditFinished"
+QT_MOC_LITERAL(20, 242, 17), // "selectItemChanged"
+QT_MOC_LITERAL(21, 260, 18), // "copyTreeItemAction"
+QT_MOC_LITERAL(22, 279, 20) // "deleteTreeItemAction"
 
     },
     "RecordOp\0onStartRecord\0\0onDoOperation\0"
@@ -60,7 +62,8 @@ QT_MOC_LITERAL(20, 238, 20) // "deleteTreeItemAction"
     "WPARAM\0wParam\0LPARAM\0lParam\0keyEvent\0"
     "onActivatedSysTrayIcon\0"
     "QSystemTrayIcon::ActivationReason\0"
-    "reason\0onExitApp\0copyTreeItemAction\0"
+    "reason\0onExitApp\0projectDesEditFinished\0"
+    "selectItemChanged\0copyTreeItemAction\0"
     "deleteTreeItemAction"
 };
 #undef QT_MOC_LITERAL
@@ -71,7 +74,7 @@ static const uint qt_meta_data_RecordOp[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      12,   14, // methods
+      14,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -79,18 +82,20 @@ static const uint qt_meta_data_RecordOp[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   74,    2, 0x0a /* Public */,
-       3,    0,   75,    2, 0x0a /* Public */,
-       4,    0,   76,    2, 0x0a /* Public */,
-       5,    0,   77,    2, 0x0a /* Public */,
-       6,    0,   78,    2, 0x0a /* Public */,
-       7,    0,   79,    2, 0x0a /* Public */,
-       8,    3,   80,    2, 0x0a /* Public */,
-      14,    3,   87,    2, 0x0a /* Public */,
-      15,    1,   94,    2, 0x0a /* Public */,
-      18,    0,   97,    2, 0x0a /* Public */,
-      19,    0,   98,    2, 0x0a /* Public */,
-      20,    0,   99,    2, 0x0a /* Public */,
+       1,    0,   84,    2, 0x0a /* Public */,
+       3,    0,   85,    2, 0x0a /* Public */,
+       4,    0,   86,    2, 0x0a /* Public */,
+       5,    0,   87,    2, 0x0a /* Public */,
+       6,    0,   88,    2, 0x0a /* Public */,
+       7,    0,   89,    2, 0x0a /* Public */,
+       8,    3,   90,    2, 0x0a /* Public */,
+      14,    3,   97,    2, 0x0a /* Public */,
+      15,    1,  104,    2, 0x0a /* Public */,
+      18,    0,  107,    2, 0x0a /* Public */,
+      19,    0,  108,    2, 0x0a /* Public */,
+      20,    0,  109,    2, 0x0a /* Public */,
+      21,    0,  110,    2, 0x0a /* Public */,
+      22,    0,  111,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void,
@@ -102,6 +107,8 @@ static const uint qt_meta_data_RecordOp[] = {
     QMetaType::Void, QMetaType::Int, 0x80000000 | 10, 0x80000000 | 12,    9,   11,   13,
     QMetaType::Void, QMetaType::Int, 0x80000000 | 10, 0x80000000 | 12,    9,   11,   13,
     QMetaType::Void, 0x80000000 | 16,   17,
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -125,8 +132,10 @@ void RecordOp::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         case 7: _t->keyEvent((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< WPARAM(*)>(_a[2])),(*reinterpret_cast< LPARAM(*)>(_a[3]))); break;
         case 8: _t->onActivatedSysTrayIcon((*reinterpret_cast< QSystemTrayIcon::ActivationReason(*)>(_a[1]))); break;
         case 9: _t->onExitApp(); break;
-        case 10: _t->copyTreeItemAction(); break;
-        case 11: _t->deleteTreeItemAction(); break;
+        case 10: _t->projectDesEditFinished(); break;
+        case 11: _t->selectItemChanged(); break;
+        case 12: _t->copyTreeItemAction(); break;
+        case 13: _t->deleteTreeItemAction(); break;
         default: ;
         }
     }
@@ -157,13 +166,13 @@ int RecordOp::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 12)
+        if (_id < 14)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 12;
+        _id -= 14;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 12)
+        if (_id < 14)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 12;
+        _id -= 14;
     }
     return _id;
 }

@@ -28,12 +28,15 @@ RecordOp::RecordOp(QWidget *parent)
 
 	ui.opTreeList->setMenu(treeWidgetMenu);
 	
+	connect(ui.opTreeList, SIGNAL(itemSelectionChanged()), this, SLOT(selectItemChanged()));
+
 	connect(ui.recordButton, SIGNAL(clicked()), this, SLOT(onStartRecord()));
 	connect(ui.operateButton, SIGNAL(clicked()), this, SLOT(onDoOperation()));
 	connect(xHook, SIGNAL(mouseEvent(int, WPARAM, LPARAM)), this, SLOT(mouseEvent(int, WPARAM, LPARAM)));
 	connect(xHook, SIGNAL(keyEvent(int, WPARAM, LPARAM)), this, SLOT(keyEvent(int, WPARAM, LPARAM)));
 	connect(opExcutor, SIGNAL(finished()), this, SLOT(onExcuteOpCompeleted()));
 
+	connect(ui.opDescriptionEdit, SIGNAL(editingFinished()), this, SLOT(projectDesEditFinished()));
 
 	// Action
 	connect(ui.newButton, SIGNAL(triggered()), this, SLOT(onNewFile()));
@@ -406,6 +409,7 @@ void RecordOp::clearOP()
 	treeItemToProject.clear();
 	ui.opTreeList->clear();
 	ui.opTable->clear();
+	ui.opDescriptionEdit->clear();
 }
 
 void RecordOp::saveXml(QDomDocument& doc, QDomElement& parent)
@@ -528,6 +532,41 @@ void RecordOp::onActivatedSysTrayIcon(QSystemTrayIcon::ActivationReason reason)
 void RecordOp::onExitApp()
 {
 	exit(0);
+}
+
+void RecordOp::projectDesEditFinished()
+{
+	QTreeWidgetItem* item = ui.opTreeList->currentItem();
+	if (item == nullptr)
+	{
+		return;
+	}
+
+	auto iter = treeItemToProject.find(item);
+	if (iter != treeItemToProject.end())
+	{
+		QString projectDes = ui.opDescriptionEdit->text();
+		// 更新Project的备注
+		iter.value()->setProjectDes(projectDes);
+	}
+}
+
+void RecordOp::selectItemChanged()
+{
+	// 更新方案描述
+	QTreeWidgetItem* item = ui.opTreeList->currentItem();
+	if (item == nullptr)
+	{
+		return;
+	}
+
+	auto iter = treeItemToProject.find(item);
+	if (iter != treeItemToProject.end())
+	{
+		// 更新Project的备注
+		QString projectDes = iter.value()->getProjectDes();
+		ui.opDescriptionEdit->setText(projectDes);
+	}
 }
 
 void RecordOp::copyTreeItemAction()

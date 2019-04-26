@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>764</width>
-    <height>356</height>
+    <height>422</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,7 +73,7 @@
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>50</y>
+      <y>40</y>
       <width>441</width>
       <height>211</height>
      </rect>
@@ -83,7 +83,7 @@
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>50</y>
+      <y>40</y>
       <width>151</width>
       <height>211</height>
      </rect>
@@ -110,7 +110,7 @@
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>29</y>
+      <y>10</y>
       <width>71</width>
       <height>21</height>
      </rect>
@@ -129,7 +129,7 @@
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>30</y>
+      <y>10</y>
       <width>81</width>
       <height>21</height>
      </rect>
@@ -142,6 +142,46 @@
     </property>
     <property name="text">
      <string>具体操作列表</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="opDescriptionEdit">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>299</y>
+      <width>601</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>微软雅黑</family>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>270</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>方案备注</string>
     </property>
    </widget>
   </widget>

@@ -7,6 +7,7 @@ bool OpProject::isBreak = false;
 
 OpProject::OpProject()
 {
+	projectDes = "";
 }
 
 
@@ -84,6 +85,8 @@ void OpProject::showOPToTableWidget(QTableWidget*& tableWidget)
 
 void OpProject::clearOP()
 {
+	projectDes = "";
+
 	for each (OPBase* op in operations)
 	{
 		delete op;
@@ -171,6 +174,7 @@ void OpProject::saveXml(QDomDocument& doc, QDomElement& parent)
 	}
 
 	QDomElement opsXml = doc.createElement("OPs");
+	opsXml.setAttribute("ProjectDes", projectDes);
 	parent.appendChild(opsXml);
 
 	for each (auto op in operations)
@@ -201,6 +205,8 @@ void OpProject::saveXml(QDomDocument& doc, QDomElement& parent)
 void OpProject::loadXml(QDomElement& opsElement)
 {
 	operations.clear();
+
+	projectDes = opsElement.attribute("ProjectDes");
 	QDomElement opElement = opsElement.firstChildElement();
 	while (!opElement.isNull())
 	{

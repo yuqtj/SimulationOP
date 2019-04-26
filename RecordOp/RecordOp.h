@@ -34,8 +34,12 @@ public slots:
 	void keyEvent(TRANSFER_PARAM);
 	void onActivatedSysTrayIcon(QSystemTrayIcon::ActivationReason reason);
 	void onExitApp();
+	
+	// project description
+	void projectDesEditFinished();
 
 	// tree widget
+	void selectItemChanged();
 	void copyTreeItemAction();
 	void deleteTreeItemAction();
 private:
