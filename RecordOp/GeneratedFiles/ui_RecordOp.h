@@ -88,7 +88,7 @@ public:
         opTreeList->setGeometry(QRect(150, 40, 151, 211));
         opTreeList->setDragEnabled(true);
         opTreeList->setDragDropMode(QAbstractItemView::InternalMove);
-        opTreeList->setSelectionMode(QAbstractItemView::SingleSelection);
+        opTreeList->setSelectionMode(QAbstractItemView::ExtendedSelection);
         opTreeList->header()->setVisible(false);
         label_2 = new QLabel(centralWidget);
         label_2->setObjectName(QStringLiteral("label_2"));

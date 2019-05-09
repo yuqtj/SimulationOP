@@ -108,14 +108,9 @@ void RecordOp::onDoOperation()
 	// 从Table中重新生成operations
 	//generateOPFromTable();
 
-	this->hide();
-	appState = OPERATING;
-
-	xHook->installMouseHook();
-	xHook->installKeyHook();
-
+	// 获取有效方案
 	int length = ui.opTreeList->topLevelItemCount();
-	for (int i = 0; i < length ; i++)
+	for (int i = 0; i < length; i++)
 	{
 		getActiveOpProjects(ui.opTreeList->topLevelItem(i));
 	}
@@ -126,6 +121,12 @@ void RecordOp::onDoOperation()
 		QMessageBox::information(NULL, "提示", "当前没有测试方案", QMessageBox::Ok);
 		return;
 	}
+
+	this->hide();
+	appState = OPERATING;
+
+	xHook->installMouseHook();
+	xHook->installKeyHook();
 
 	QString operateTimesStr = ui.operationTimesText->text();
 	// 循环执行次数，默认为1次
@@ -568,51 +569,56 @@ void RecordOp::selectItemChanged()
 
 void RecordOp::copyTreeItemAction()
 {
-	QTreeWidgetItem* curItem = ui.opTreeList->currentItem();
-	if (curItem == nullptr)
+	auto selectedItems = ui.opTreeList->selectedItems();
+	for each (auto curItem in selectedItems)
 	{
-		return;
+		if (curItem == nullptr)
+		{
+			return;
+		}
+
+		// 复制逻辑
+		auto iter = treeItemToProject.find(curItem);
+		if (iter == treeItemToProject.end())
+		{
+			return;
+		}
+		OpProject* opProject = iter.value()->copy();
+
+		QString newName = QString("%1_%2").arg(curItem->text(0)).arg(treeItemToProject.size());
+		QTreeWidgetItem* newItem = new OPTreeWidgetItem();
+		newItem->setText(0, newName);
+		newItem->setCheckState(0, curItem->checkState(0));
+		ui.opTreeList->addTopLevelItem(newItem);
+
+		treeItemToProject.insert(newItem, opProject);
 	}
-
-	// 复制逻辑
-	auto iter = treeItemToProject.find(curItem);
-	if (iter == treeItemToProject.end())
-	{
-		return;
-	}
-	OpProject* opProject = iter.value()->copy();
-
-	QString newName = QString("%1_%2").arg(curItem->text(0)).arg(treeItemToProject.size());
-	QTreeWidgetItem* newItem = new OPTreeWidgetItem();
-	newItem->setText(0, newName);
-	newItem->setCheckState(0, curItem->checkState(0));
-	ui.opTreeList->addTopLevelItem(newItem);
-
-	treeItemToProject.insert(newItem, opProject);
 }
 
 void RecordOp::deleteTreeItemAction()
 {
-	QTreeWidgetItem* curItem = ui.opTreeList->currentItem();
-	
-	if (curItem == nullptr)
-	{
-		return;
-	}
+	auto selectedItems = ui.opTreeList->selectedItems();
 
-	// 删除逻辑
-	deleteOpProject(curItem);
-
-	QTreeWidgetItem* parentItem = curItem->parent();
-	if (parentItem == nullptr)
+	for each (auto curItem in selectedItems)
 	{
-		int index = ui.opTreeList->indexOfTopLevelItem(curItem);
-		ui.opTreeList->takeTopLevelItem(index);
-	}
-	else
-	{
-		int index = parentItem->indexOfChild(curItem);
-		parentItem->takeChild(index);
-	}
+		if (curItem == nullptr)
+		{
+			return;
+		}
 
+		// 删除逻辑
+		deleteOpProject(curItem);
+
+		QTreeWidgetItem* parentItem = curItem->parent();
+		if (parentItem == nullptr)
+		{
+			int index = ui.opTreeList->indexOfTopLevelItem(curItem);
+			ui.opTreeList->takeTopLevelItem(index);
+		}
+		else
+		{
+			int index = parentItem->indexOfChild(curItem);
+			parentItem->takeChild(index);
+		}
+	}
 }

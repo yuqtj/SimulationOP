@@ -12,6 +12,20 @@ OpExcutor::~OpExcutor()
 	clear();
 }
 
+void OpExcutor::runOp()
+{
+	for (int i = 0; i < operateTimes; i++)
+	{
+		for each (auto opProject in opProjects)
+		{
+			if (0 == opProject->excuteOP())
+			{
+				return;
+			}
+		}
+	}
+}
+
 void OpExcutor::run()
 {
 	if (opProjects.size() == 0)
@@ -19,16 +33,6 @@ void OpExcutor::run()
 		return;
 	}
 
-	for (int i = 0; i < operateTimes; i++)
-	{
-		for each (auto opProject in opProjects)
-		{
-			if (0 == opProject->excuteOP())
-			{
-				break;
-			}
-		}
-	}
-
+	runOp();
 	clear();
 }

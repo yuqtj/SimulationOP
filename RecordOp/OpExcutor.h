@@ -31,6 +31,9 @@ public:
 	}
 
 private:
+	void runOp();
+
+private:
 	QList<OpProject*> opProjects;
 	int operateTimes = 1;
 
